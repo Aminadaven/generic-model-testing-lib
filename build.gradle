@@ -1,0 +1,103 @@
+plugins {
+	id 'java-library'
+	id 'java-test-fixtures'
+	id 'maven-publish'
+	id 'org.springframework.boot' version '2.7.0'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+}
+
+group = 'com.aminadav'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+java {
+	withJavadocJar()
+	withSourcesJar()
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-data-rest'
+//	Not necessary, but it improve performance
+	testFixturesImplementation 'org.springframework.boot:spring-boot-starter-undertow'
+	modules {
+		module("org.springframework.boot:spring-boot-starter-tomcat") {
+			replacedBy("org.springframework.boot:spring-boot-starter-undertow", "Use Undertow instead of Tomcat")
+		}
+	}
+
+	testFixturesImplementation 'uk.co.jemos.podam:podam:7.2.9.RELEASE'
+
+	testFixturesImplementation 'org.testcontainers:junit-jupiter'
+	testFixturesImplementation 'org.testcontainers:postgresql'
+
+	testFixturesImplementation 'com.fasterxml.jackson.core:jackson-databind'
+	testFixturesImplementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+}
+
+dependencyManagement {
+	imports {
+		mavenBom 'org.testcontainers:testcontainers-bom:1.17.2'
+	}
+}
+
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			artifactId = "${rootProject.name}"
+			from components.java
+			pom {
+				name = 'Generic Model Testing'
+				description = 'Library to provide generic model testing, i.e. testing Entities and Repositories for Spring Boot'
+				url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
+				properties = [
+					'project.build.finalName': '${rootProject.name}',
+					'project.build.groupId': '${rootProject.group}',
+					'project.build.version': '${rootProject.version}'
+				]
+//				licenses {
+//					license {
+//						name = 'The Apache License, Version 2.0'
+//						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+//					}
+//				}
+				developers {
+					developer {
+						id = 'aminadaven'
+						name = 'Aminadav Elichay Nachshon'
+						email = 'aminadaven@gmail.com'
+					}
+				}
+				scm {
+					connection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
+					developerConnection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
+					url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
+				}
+			}
+		}
+	}
+	repositories {
+		maven {
+			name = "GitHubPackages"
+			url = "https://maven.pkg.github.com/aminadaven/generic-model-testing"
+			credentials {
+				username = System.getenv("GITHUB_ACTOR")
+				password = System.getenv("GITHUB_TOKEN")
+			}
+		}
+	}
+	repositories {
+		mavenCentral()
+	}
+}
+
+javadoc {
+	if(JavaVersion.current().isJava9Compatible()) {
+		options.addBooleanOption('html5', true)
+	}
+}

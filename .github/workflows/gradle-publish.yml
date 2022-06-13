@@ -2,7 +2,7 @@ name: Gradle Package
 
 on:
   release:
-    types: [created]
+    types: [ created ]
 
 jobs:
   build:
@@ -13,43 +13,45 @@ jobs:
       packages: write
 
     steps:
-    - uses: actions/checkout@v3.0.2
-      with:
-        persist-credentials: false
+      - uses: actions/checkout@v3.0.2
+        with:
+          persist-credentials: false
 
-    - name: "Validate Gradlew"
-      uses: gradle/wrapper-validation-action@v1.0.4
-      
-    - name: "Permit Gradlew"
-      run: chmod +x gradlew
-      
-    - name: "Setup JDK"
-      uses: actions/setup-java@v3.3.0
-      with:
-        java-version: '17'
-        distribution: 'zulu'
-      
-#     - name: Set up JDK 17
-#       uses: actions/setup-java@v3.3.0
-#       with:
-#         java-version: '17'
-#         distribution: 'zulu'
-#         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
-#         settings-path: ${{ github.workspace }} # location for the settings.xml file
+      - name: "Validate Gradlew"
+        uses: gradle/wrapper-validation-action@v1.0.4
 
-#    - name: Build with Gradle
-#      uses: gradle/gradle-build-action@v2.2.0
-#      with:
-#        arguments: build
+      - name: "Permit Gradlew"
+        run: chmod +x gradlew
 
-    # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
-    # the publishing section of your build.gradle
-    - name: Publish to GitHub Packages
-      uses: gradle/gradle-build-action@v2.2.0
-      with:
-        arguments: publish
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: "Setup JDK"
+        uses: actions/setup-java@v3.3.0
+        with:
+          java-version: '17'
+          distribution: 'zulu'
+          server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+          settings-path: ${{ github.workspace }} # location for the settings.xml file
+      
+      #     - name: Set up JDK 17
+      #       uses: actions/setup-java@v3.3.0
+      #       with:
+      #         java-version: '17'
+      #         distribution: 'zulu'
+      #         server-id: github # Value of the distributionManagement/repository/id field of the pom.xml
+      #         settings-path: ${{ github.workspace }} # location for the settings.xml file
+
+      #    - name: Build with Gradle
+      #      uses: gradle/gradle-build-action@v2.2.0
+      #      with:
+      #        arguments: build
+
+      # The USERNAME and TOKEN need to correspond to the credentials environment variables used in
+      # the publishing section of your build.gradle
+      - name: Publish to GitHub Packages
+        uses: gradle/gradle-build-action@v2.2.0
+        with:
+          arguments: -Pversion=${{ github.event.release.tag_name }} publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #       env:
 #         USERNAME: ${{ github.actor }}
 #         TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -37,8 +37,8 @@ jobs:
         uses: gradle/gradle-build-action@v2.2.0
         with:
           arguments: -Pversion=${{ github.event.release.tag_name }} publish
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#       env:
-#         USERNAME: ${{ github.actor }}
-#         TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#        env:
+#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+       env:
+         USERNAME: ${{ github.actor }}
+         TOKEN: ${{ secrets.GITHUB_TOKEN }}

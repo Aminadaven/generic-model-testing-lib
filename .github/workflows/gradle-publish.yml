@@ -20,8 +20,8 @@ jobs:
     - name: "Validate Gradlew"
       uses: gradle/wrapper-validation-action@v1.0.4
       
-#     - name: "Permit Gradlew"
-#       run: chmod +x gradlew
+    - name: "Permit Gradlew"
+      run: chmod +x gradlew
       
     - name: "Setup JDK"
       uses: actions/setup-java@v3.3.0

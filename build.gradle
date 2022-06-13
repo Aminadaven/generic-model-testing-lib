@@ -48,39 +48,47 @@ dependencyManagement {
 
 publishing {
 	publications {
-		mavenJava(MavenPublication) {
-			artifactId = "${rootProject.name}"
-			from components.java
+		register("jar", MavenPublication) {
+			from(components["java"])
 			pom {
-				name = 'Generic Model Testing'
-				description = 'Library to provide generic model testing, i.e. testing Entities and Repositories for Spring Boot'
-				url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
-				properties = [
-					'project.build.finalName': '${rootProject.name}',
-					'project.build.groupId': '${rootProject.group}',
-					'project.build.version': '${rootProject.version}'
-				]
-//				licenses {
-//					license {
-//						name = 'The Apache License, Version 2.0'
-//						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
-//					}
-//				}
-				developers {
-					developer {
-						id = 'aminadaven'
-						name = 'Aminadav Elichay Nachshon'
-						email = 'aminadaven@gmail.com'
-					}
-				}
-				scm {
-					connection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
-					developerConnection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
-					url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
-				}
+				url.set("https://github.com/aminadaven/generic-model-testing.git")
 			}
 		}
 	}
+//	publications {
+//		mavenJava(MavenPublication) {
+//			artifactId = "${rootProject.name}"
+//			from components.java
+//			pom {
+//				name = 'Generic Model Testing'
+//				description = 'Library to provide generic model testing, i.e. testing Entities and Repositories for Spring Boot'
+//				url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
+//				properties = [
+//					'project.build.finalName': '${rootProject.name}',
+//					'project.build.groupId': '${rootProject.group}',
+//					'project.build.version': '${rootProject.version}'
+//				]
+////				licenses {
+////					license {
+////						name = 'The Apache License, Version 2.0'
+////						url = 'https://www.apache.org/licenses/LICENSE-2.0.txt'
+////					}
+////				}
+//				developers {
+//					developer {
+//						id = 'aminadaven'
+//						name = 'Aminadav Elichay Nachshon'
+//						email = 'aminadaven@gmail.com'
+//					}
+//				}
+//				scm {
+//					connection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
+//					developerConnection = 'scm:git:ssh://maven.pkg.github.com/aminadaven/generic-model-testing.git'
+//					url = 'https://maven.pkg.github.com/aminadaven/generic-model-testing'
+//				}
+//			}
+//		}
+//	}
 	repositories {
 		maven {
 			name = "GitHubPackages"

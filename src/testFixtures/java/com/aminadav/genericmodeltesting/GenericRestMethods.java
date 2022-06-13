@@ -211,41 +211,15 @@ abstract class GenericRestMethods<ENTITY, ID> {
   }
 
   protected boolean entityEquals(ENTITY entity1, ENTITY entity2) {
-    return Arrays.stream(this.clazz.getDeclaredFields()).filter(field -> !field.equals(id))
-        .peek(field -> field.setAccessible(true)).filter(
-            (ThrowingPredicate<Field>) field -> !classEqualsMatcherMap.getOrDefault(field.getType(),
-                    field.getType().isArray()
-                        ? (o1, o2) -> Arrays.deepEquals((Object[]) o1, (Object[]) o2)
-                        : Objects::equals)
-                .equals(field.get(entity1), field.get(entity2))).peek(
-            (ThrowingConsumer<Field>) field -> System.err.format("%s: %ss do not match, %s != %s\n",
-                className, field.getName(), field.get(entity1), field.get(entity2))).count() == 0;
-    /*
-//    Old implementation:
-    for (Field field : this.clazz.getDeclaredFields()) {
-      // Skip id field
-      if (field.equals(id)) {
-        continue;
-      }
-      try {
-        field.setAccessible(true);
-        EqualsMatcher equalsMatcher = classEqualsMatcherMap.getOrDefault(field.getType(), Objects::equals);
-        if (!equalsMatcher.equals(field.get(entity1), field.get(entity2))) {
-          System.err.format("%s: %ss do not match, %s != %s\n", className, field.getName(),
-              field.get(entity1), field.get(entity2));
-          return false;
-        }
-
-//        if (!Objects.equals(field.get(entity1), field.get(entity2))) {
-//          System.err.format("%s: %ss do not match, %s != %s\n", className, field.getName(),
-//              field.get(entity1), field.get(entity2));
-//          return false;
-//        }
-      } catch (IllegalAccessException e) {
-        e.printStackTrace();
-      }
-    }
-    return true;
-    */
+    return Arrays.stream(this.clazz.getDeclaredFields())
+        .filter(field -> !field.equals(id))
+        .peek(field -> field.setAccessible(true))
+        .filter((ThrowingPredicate<Field>) field ->
+            !classEqualsMatcherMap.getOrDefault(field.getType(), Objects::equals)
+                .equals(field.get(entity1), field.get(entity2)))
+        .peek((ThrowingConsumer<Field>) field ->
+            System.err.format("%s: %ss do not match, %s != %s\n",
+                className, field.getName(), field.get(entity1), field.get(entity2)))
+        .count() == 0;
   }
 }

@@ -48,13 +48,22 @@ dependencyManagement {
 
 publishing {
 	publications {
-		register("jar", MavenPublication) {
-			from(components["java"])
-			pom {
-				url.set("https://github.com/aminadaven/generic-model-testing.git")
-			}
+		maven(MavenPublication) {
+			artifactId = "${rootProject.name}"
+			groupId = "$group"
+			version = "$version"
+
+			from components.java
 		}
 	}
+//	publications {
+//		register("jar", MavenPublication) {
+//			from(components["java"])
+//			pom {
+//				url.set("https://github.com/aminadaven/generic-model-testing.git")
+//			}
+//		}
+//	}
 //	publications {
 //		mavenJava(MavenPublication) {
 //			artifactId = "${rootProject.name}"

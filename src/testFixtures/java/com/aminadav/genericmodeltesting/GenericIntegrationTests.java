@@ -1,6 +1,7 @@
 package com.aminadav.genericmodeltesting;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +24,7 @@ public abstract class GenericIntegrationTests<ENTITY, ID> extends
   }
 
   @Test
-  void contextLoads() {
+  public void contextLoads() {
   }
 
   @Test
@@ -35,7 +36,6 @@ public abstract class GenericIntegrationTests<ENTITY, ID> extends
   public void should_post_entity() throws Exception {
     ENTITY entity = createEntity();
     assertTrue(repository.existsById(postEntity(entity)));
-//    assertTrue(entityExists(postEntity(entity), entity));
   }
 
   @Test
@@ -51,22 +51,8 @@ public abstract class GenericIntegrationTests<ENTITY, ID> extends
   }
 
   @Test
-  public void should_get_same_data() throws Exception {
-    ENTITY postEntity = createEntity();
-    ENTITY getEntity = getEntity(postEntity(postEntity));
-    assertTrue(entityEquals(getEntity, postEntity));
-  }
-
-  @Test
   public void should_get_all_entities() throws Exception {
     assertThat(createAndPostEntities(3).keySet()).allSatisfy(this::getEntity);
-//    Old implementations:
-//    HashMap<ID, ENTITY> entities = createAndPostEntities(3);
-//    for (ID id : entities.keySet()) {
-//      ENTITY entity = entities.get(id);
-//      ENTITY getEntity = getEntity(id);
-//      assertTrue(entityEquals(getEntity, entity));
-//    }
   }
 
   @Test
@@ -98,7 +84,7 @@ public abstract class GenericIntegrationTests<ENTITY, ID> extends
     ID id = postEntity(createEntity());
     deleteEntity(id);
     assertFalse(repository.existsById(id));
-    assertTrue(repository.count() == 0);
+    assertEquals(0, repository.count());
 
     HashMap<ID, ENTITY> entities = createAndPostEntities(3);
     ID idToDelete = entities.keySet().iterator().next();

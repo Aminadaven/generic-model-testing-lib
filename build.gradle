@@ -91,9 +91,6 @@ publishing {
 			}
 		}
 	}
-	repositories {
-		mavenCentral()
-	}
 }
 
 javadoc {
